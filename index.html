@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Senke90 run on open data for Nairobi City County: feeder corridors the matatu map does not show, what is tested, and the Kisumu ground-truthing step.">
 <meta name="author" content="Charles Nelson Oduor">
-<title>Senke90 Nairobi Demonstration</title>
+<title>Senke90: Nairobi Demonstration</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: a transit-survey sheet. Figures strip, then the map as the working surface with its legend beside it, then ranked tables and the method register. */
@@ -782,10 +782,10 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
 <body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">Senke90 · Nairobi demonstration · For discussion with the UTM Research Clusters team</div>
-  <h1>Boda corridors a city depends on, mapped in Nairobi and ready to test in Kisumu</h1>
-  <p class="lead">Senke90 uses open data to find the roads that carry residents to the nearest matatu stage where no matatu route runs. These are the roads where motorcycle taxis are expected to carry the load, and where charging, electrification and rider engagement would start. This page shows the method working on Nairobi and sets out how it would be ground truthed in Kisumu.</p>
-  <div class="meta">Charles Nelson Oduor, urban planning researcher, Nairobi · Version 3, 4 October 2026</div>
+  <div class="eyebrow">Senke90 · Nairobi demonstration </div>
+  <h1>Senke90: Nairobi demonstration</h1>
+  <p class="lead">Senke90 uses open data to find the roads that carry residents to the nearest matatu stage where no matatu route runs. These are the roads where motorcycle taxis are expected to carry the load, and where charging, electrification and rider engagement would start. This page shows the method working on Nairobi and sets out how it would be scaled to actual piloting in Kisumu.</p>
+  <div class="meta">Charles Nelson, urban planning researcher, Nairobi · October 2026</div>
 </header>
 
 <div class="brief">
@@ -804,7 +804,7 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
 
 <section>
   <h2>The Nairobi map</h2>
-  <p>Pink lines are roads that carry residents to a matatu stage and have no matatu route on them. Numbers mark the ten largest. Blue lines are the mapped matatu network.</p>
+  <p>The pink lines denotes roads that carry residents to a matatu stage and have no matatu route on them. Numbers mark the ten largest. The blue lines are the mapped matatu network.</p>
   <div class="mapgrid">
     <div id="map" role="application" aria-label="Map of Nairobi showing matatu routes, flagged feeder corridors and ranked stages"></div>
     <div class="legend" id="legend">
@@ -835,7 +835,7 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
   <div class="test">
     <h3>Corridor 1: Kibera to Moi Girls' School Junction</h3>
     <dl>
-      <dt>Why it is flagged</dt><dd>65,474 residents live beyond 800 m of a matatu stop and reach the stage at Moi Girls' School Junction along Lang'ata Link Road and Ali Jaden Road. The corridor is 2.4 km long, has no mapped matatu route within 150 m, and carries the largest feeder load in the county. <span class="chip der">Derived</span></dd>
+      <dt>Why it is flagged</dt><dd>65,000+ residents live beyond 800 m of a matatu stop and reach the stage at Moi Girls' School Junction along Lang'ata Link Road and Ali Jaden Road. The corridor is 2.4 km long, has no mapped matatu route within 150 m, and carries the largest feeder load in the county. <span class="chip der">Derived</span></dd>
       <dt>Evidence</dt><dd>The road network and matatu stops are mapped data <span class="chip obs">Observed</span>. The resident count comes from modelled population <span class="chip prox">Proxy</span>. The stage also ranks first of all stages for feeder population, at 65,902.</dd>
       <dt>What is uncertain</dt><dd>The matatu feed dates from 2019. Gridded population is least reliable in dense settlements such as Kibera. The model has no observation of how residents make the trip: on foot, by boda or by another route.</dd>
       <dt>Who to involve</dt><dd>The riders and stage leadership at Moi Girls' School Junction, the ward administrators for the area, the county's mobility and climate teams, and e-mobility operators working nearby.</dd>
@@ -893,7 +893,7 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
 <section>
   <h2>From Nairobi to Kisumu</h2>
   <div class="three">
-    <div><h3>Transfers as it is</h3><p>Roads and activity centres from OpenStreetMap, population from WorldPop, and the model code. A full city run takes under half an hour on a laptop.</p></div>
+    <div><h3>Transfers as it is</h3><p>Roads and activity centres from OpenStreetMap, population from WorldPop, and the model code. </p></div>
     <div><h3>Has to be built</h3><p>Kisumu has no published matatu route and stop dataset. The formal network will be drawn from the corridors in the Kisumu Sustainable Mobility Plan and from a stage inventory collected in the field.</p></div>
     <div><h3>May behave differently</h3><p>In Kisumu, bodas are widely used for whole trips as well as feeder trips, so travel to markets, hospitals and schools may matter more than distance to a matatu stage. Road and stage mapping in OpenStreetMap is thinner than in Nairobi. Both are checked in the field.</p></div>
   </div>
