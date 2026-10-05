@@ -827,7 +827,7 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
       <label><input type="checkbox" id="l-feed" checked><span class="sw thin" style="--c:var(--feeder)"></span><span>Other feeder roads<small>1,000 or more residents relying on them.</small></span></label>
       <label><input type="checkbox" id="l-trunk"><span class="sw" style="--c:var(--trunk)"></span><span>Busiest 10% of roads by modelled demand<small>Green where a matatu route runs, purple where none does.</small></span></label>
       <label><input type="checkbox" id="l-road" checked><span class="sw thin" style="--c:var(--boundary)"></span><span>OpenStreetMap basemap and county boundary</span></label>
-      <div class="hint">The map opens on the area where the corridors sit. Use the plus and minus buttons to zoom, and drag to move.</div>
+      <div class="hint">Hover over any line or circle to see what it is, and click a corridor or a green circle for details. Use the plus and minus buttons to zoom, and drag to move.</div>
     </div>
   </div>
 </section>
@@ -1087,14 +1087,17 @@ const map = L.map("map", {zoomControl:true, scrollWheelZoom:false, zoomSnap:.25,
 map.attributionControl.setPrefix(false);
 const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 L.control.scale({imperial:false}).addTo(map);
-const P = {}; ["road","feed","trunk","matatu","obs","corr","stage"].forEach((p,i) => { map.createPane(p).style.zIndex = 400 + i*10; P[p] = L.canvas({pane:p, padding:.3, tolerance:6}); });
+// One canvas for everything the reader can hover or click, so no layer blocks another. Roads sit on their own canvas underneath.
+const P = {}; map.createPane("road").style.zIndex = 400; map.createPane("ix").style.zIndex = 410;
+P.road = L.canvas({pane:"road", padding:.3}); const IX = L.canvas({pane:"ix", padding:.3, tolerance:6}); ["feed","trunk","matatu","obs","corr","stage"].forEach(p => P[p] = IX);
+function restack(){ [G.obs, G.corr, G.stage].forEach(g => { if (map.hasLayer(g)) g.eachLayer(l => l.eachLayer ? l.eachLayer(x => x.bringToFront()) : l.bringToFront()); }); }
 const G = {road:L.layerGroup(), feed:L.layerGroup(), trunk:L.layerGroup(), matatu:L.layerGroup(), corr:L.layerGroup(), num:L.layerGroup(), obs:L.layerGroup(), stage:L.layerGroup(), label:L.layerGroup()};
 const el = (t, s) => { const e = document.createElement(t); if (s !== undefined) e.textContent = s; return e; };
 
 const boundary = L.polygon(D.boundary.map(ll), {renderer:P.road, fill:false, weight:2, dashArray:"6 5", interactive:false}).addTo(G.road);
 const roads = D.roads.map(r => L.polyline(ll(r[1]), {renderer:P.road, weight:r[0] <= 2 ? 2.2 : r[0] === 3 ? 1.4 : .9, interactive:false}).addTo(G.road));
-const matatu = D.matatu.map(c => L.polyline(ll(c), {renderer:P.matatu, weight:1.1, opacity:.6, interactive:false}).addTo(G.matatu));
-const feed = D.feeder.map(f => L.polyline(ll(f[1]), {renderer:P.feed, weight:1 + 2.2*Math.sqrt(f[0]/20000), opacity:.8, interactive:false}).addTo(G.feed));
+const matatu = D.matatu.map(c => L.polyline(ll(c), {renderer:P.matatu, weight:1.1, opacity:.6}).bindTooltip("Mapped matatu route (Digital Matatus feed, 2019)", {sticky:true, className:"st"}).addTo(G.matatu));
+const feed = D.feeder.map(f => L.polyline(ll(f[1]), {renderer:P.feed, weight:1 + 2.2*Math.sqrt(f[0]/20000), opacity:.8}).bindTooltip("Feeder road in the model: about " + fmt(r100(f[0])) + " residents would use it to reach a stage", {sticky:true, className:"st"}).addTo(G.feed));
 let trunk = [], minor = null;
 function streets(){
   const on = map.getZoom() >= 13 && document.getElementById("l-road").checked;
@@ -1107,14 +1110,15 @@ D.corridors.forEach(c => {
   if (c.area) { box.append(el("span", c.area)); box.append(el("br")); }
   box.append(el("span", "About " + fmt(r100(c.people)) + " residents relying on it · " + (c.length_m/1000).toFixed(1) + " km")); box.append(el("br"));
   box.append(el("span", "Road: " + c.roads));
-  const g = L.featureGroup(c.segs.map(s => L.polyline(ll(s), {renderer:P.corr, weight:3 + 6*Math.sqrt(c.people/65474), lineCap:"round"}))).bindPopup(box).addTo(G.corr);
+  const g = L.featureGroup(c.segs.map(s => L.polyline(ll(s), {renderer:P.corr, weight:3 + 6*Math.sqrt(c.people/65474), lineCap:"round"}))).bindPopup(box).bindTooltip("Corridor " + c.rank + " flagged by the model: feeds " + c.stage + ". Click for details.", {sticky:true, className:"st"}).addTo(G.corr);
   corr[c.rank] = g;
 });
 D.corridors.slice(0, 10).forEach(c => L.tooltip({permanent:true, direction:"top", offset:[0,-6], className:"cn", interactive:false}).setLatLng([c.lat, c.lon]).setContent(String(c.rank)).addTo(G.num));
 const stages = D.stages.map(s => L.circleMarker([s.lat, s.lon], {renderer:P.stage, radius:3.5 + 6*Math.sqrt(s.pop/65902), weight:2.5, fillOpacity:.92})
-  .bindTooltip(s.rank + ". " + s.name + " · about " + fmt(r100(s.pop)) + " residents", {className:"st"}).addTo(G.stage));
+  .bindTooltip("Stage ranked " + s.rank + " by the model: " + s.name + ", about " + fmt(r100(s.pop)) + " feeder residents", {className:"st"}).addTo(G.stage));
 const observed = D.observed.map(o => L.circleMarker([o.lat, o.lon], {renderer:P.obs, radius:3 + 15*Math.sqrt(o.n/5138), weight:1, fillOpacity:.55})
-  .bindTooltip(o.name + " · " + fmt(o.n) + " tracked trip starts and ends", {className:"st"}).addTo(G.obs));
+  .bindTooltip(o.name + ": " + fmt(o.n) + " tracked trip starts and ends", {className:"st"}).bindPopup("<b></b>").addTo(G.obs));
+observed.forEach((m, i) => { const o = D.observed[i], b = el("div"); b.append(el("b", o.name)); b.append(el("br")); b.append(el("span", fmt(o.n) + " trip starts and ends by GPS-tracked boda riders were recorded within 100 m of this stage in late 2023.")); b.append(el("br")); b.append(el("span", "Evidence: Observed")); m.setPopupContent(b); });
 D.labels.forEach(l => L.tooltip({permanent:true, direction:"center", className:"pl", interactive:false}).setLatLng([l[1], l[2]]).setContent(l[0]).addTo(G.label));
 
 function paint(){
@@ -1126,13 +1130,13 @@ function paint(){
   trunk.forEach(t => t[1].setStyle({color:tok(t[0] ? "--trunk" : "--trunkoff")}));
   if (minor) minor.eachLayer(l => l.setStyle({color:tok("--road")}));
 }
-["road","feed","matatu","obs","corr","label","num"].forEach(k => G[k].addTo(map));
+["road","feed","matatu","obs","corr","label","num"].forEach(k => G[k].addTo(map)); restack();
 map.fitBounds(D.observed.reduce((b,o) => b.extend([o.lat, o.lon]), G.corr.getLayers().reduce((b,g) => b.extend(g.getBounds()), L.latLngBounds([]))), {padding:[30,30]}); paint();
-const bind = (id, keys) => document.getElementById(id).addEventListener("change", e => keys.forEach(k => e.target.checked ? G[k].addTo(map) : map.removeLayer(G[k])));
+const bind = (id, keys) => document.getElementById(id).addEventListener("change", e => { keys.forEach(k => e.target.checked ? G[k].addTo(map) : map.removeLayer(G[k])); restack(); });
 bind("l-corr",["corr","num"]); bind("l-stage",["stage"]); bind("l-obs",["obs"]); bind("l-matatu",["matatu"]); bind("l-feed",["feed"]); bind("l-road",["road","label"]); document.getElementById("l-road").addEventListener("change", e => e.target.checked ? tiles.addTo(map) : map.removeLayer(tiles)); map.on("zoomend", streets);
 document.getElementById("l-trunk").addEventListener("change", e => {
-  if (e.target.checked && !trunk.length) { trunk = D.trunk.map(t => [t[0], L.polyline(ll(t[1]), {renderer:P.trunk, weight:1.8, opacity:.85, interactive:false}).addTo(G.trunk)]); paint(); }
-  e.target.checked ? G.trunk.addTo(map) : map.removeLayer(G.trunk);
+  if (e.target.checked && !trunk.length) { trunk = D.trunk.map(t => [t[0], L.polyline(ll(t[1]), {renderer:P.trunk, weight:1.8, opacity:.85}).bindTooltip(t[0] ? "Among the busiest 10% of roads by modelled demand. A matatu route runs here." : "Among the busiest 10% of roads by modelled demand. No mapped matatu route runs here.", {sticky:true, className:"st"}).addTo(G.trunk)]); paint(); }
+  e.target.checked ? G.trunk.addTo(map) : map.removeLayer(G.trunk); restack();
 });
 new MutationObserver(paint).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint);
