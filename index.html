@@ -104,6 +104,8 @@ td .chip{margin-top:2px}
 .ctl input[type=range]{width:100%;accent-color:var(--corridor)}.ctl select:focus-visible,.ctl input:focus-visible{outline:2px solid var(--corridor);outline-offset:2px}
 .res{display:flex;flex-direction:column;gap:14px;justify-content:center;border-left:2px solid var(--ink);padding-left:20px;min-width:0}
 .res b{display:block;font-family:var(--display);font-size:1.9rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.05}.res span{font-size:.88rem;color:var(--muted)}
+details.fold{margin-top:8px}details.fold>summary{font-family:var(--display);font-weight:600;font-size:1.08rem;padding:14px 16px}
+details.fold>.dbody{gap:16px;padding-bottom:20px}details.fold .tw{border-color:var(--line)}details.fold .test,details.fold .scenbox{background:var(--bg)}
 @media (max-width:860px){.scenbox{grid-template-columns:minmax(0,1fr)}.res{border-left:0;border-top:2px solid var(--ink);padding:14px 0 0}.test dl,.tl>div{grid-template-columns:minmax(0,1fr)}.mapgrid{grid-template-columns:minmax(0,1fr)}#map{height:62vh}.bar,.axis{grid-template-columns:minmax(0,1fr);gap:3px}.bar .v{text-align:left}.axis div:first-child,.axis div:last-child{display:none}}
 /* required styles */
 
@@ -789,11 +791,28 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
 <body>
 <div class="wrap">
 <header>
-  <div class="eyebrow">Senke90 · Nairobi demonstration</div>
+  <div class="eyebrow">An evidence instrument for inclusive e-mobility planning</div>
   <h1>Senke90: Nairobi demonstration</h1>
-  <p class="lead">Senke90 uses open data to find the roads and stages a city's motorcycle taxis are likely to depend on, in places where formal transport data has nothing to say. It is meant to help a county decide where charging, electrification and rider engagement should start. This page shows the method running on Nairobi, reports a first check against tracked boda riders, and sets out how it would be scaled to actual piloting in Kisumu.</p>
+  <p class="lead">Counties are setting targets for electric motorcycles and charging stations, yet boda bodas are missing from the transport data those plans draw on. Senke90 uses open data to predict where bodas work, checks each prediction against observation, and labels every finding by how well it is supported, so that a county can see where to start and who to involve.</p>
   <div class="meta">Charles Nelson, urban planning researcher, Nairobi · October 2026</div>
 </header>
+
+<ol class="stages" aria-label="What Senke90 does">
+  <li><b>Predicts</b><span>From open data on roads, population and destinations, it ranks the stages and corridors where boda demand should concentrate.</span></li>
+  <li><b>Tests</b><span>It checks each ranking against observation, using mapped matatu routes, tracked riders and field counts.</span></li>
+  <li><b>Labels</b><span>Every figure carries one of four labels, Observed, Derived, Proxy or Scenario, so a reader knows how far to trust it.</span></li>
+  <li><b>Connects</b><span>Each location is tied to a named stage, the unit where riders organize, so the people a pilot depends on are known before it is designed.</span></li>
+</ol>
+
+<section>
+  <h2>What the Nairobi demonstration found</h2>
+  <div class="figs">
+    <div class="fig"><b>65%</b><span>of tracked boda trip ends lie within 150 m of a matatu stop, where 28% of residents live. Bodas work from stages on the matatu network. <span class="chip obs">Observed</span></span></div>
+    <div class="fig"><b>4×</b><span>the trip ends at stages close to markets, hospitals, schools and shops, compared with other stages. Destinations show which stages matter. <span class="chip obs">Observed</span></span></div>
+    <div class="fig"><b>2.7%</b><span>of trip ends fall beside the feeder corridors the model flagged, where 11.6% of residents live. That prediction did not hold where it could be tested. <span class="chip obs">Observed</span></span></div>
+  </div>
+  <p>The demonstration ran the full method on Nairobi with open data, then checked it against GPS records from 119 boda riders. One prediction held, one did not, and the page reports both. The same method, corrected by this result, is what is proposed for Kisumu.</p>
+</section>
 
 <section>
   <h2>The Nairobi map</h2>
@@ -801,8 +820,8 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
   <div class="mapgrid">
     <div id="map" role="application" aria-label="Map of Nairobi showing matatu routes, flagged feeder corridors and ranked stages"></div>
     <div class="legend" id="legend">
-      <label><input type="checkbox" id="l-corr" checked><span class="sw" style="--c:var(--corridor)"></span><span>Flagged feeder corridors<small>Width shows residents relying on the road. Select one for details.</small></span></label>
-      <label><input type="checkbox" id="l-stage" checked><span class="sw dot"></span><span>Stages ranked by feeder population<small>Candidate interchange, charging and battery swap points.</small></span></label>
+      <label><input type="checkbox" id="l-corr" checked><span class="sw" style="--c:var(--corridor)"></span><span>Feeder corridors flagged by the model<small>Model output, still to be tested in most of the city. Width shows residents relying on the road.</small></span></label>
+      <label><input type="checkbox" id="l-stage"><span class="sw dot"></span><span>Stages ranked by modelled feeder population<small>Model output. This ranking did not predict the busy stages in the tracked data.</small></span></label>
       <label><input type="checkbox" id="l-obs" checked><span class="sw dot obs"></span><span>Where tracked bodas stop<small>Trip starts and ends of 119 GPS-tracked riders, late 2023, grouped by stage. Circle size shows the count.</small></span></label>
       <label><input type="checkbox" id="l-matatu" checked><span class="sw" style="--c:var(--matatu)"></span><span>Mapped matatu routes<small>Digital Matatus feed, 2019.</small></span></label>
       <label><input type="checkbox" id="l-feed" checked><span class="sw thin" style="--c:var(--feeder)"></span><span>Other feeder roads<small>1,000 or more residents relying on them.</small></span></label>
@@ -813,9 +832,7 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
   </div>
 </section>
 
-
-
-  <section id="observed">
+<section id="observed">
   <h2>What tracked bodas show</h2>
   <p>The model was checked against an open dataset of GPS-tracked boda riders in Nairobi (Kitetu, Mbutura, Stratford and Booysen, 2025). It holds about 122,000 recorded movements by 119 riders between 13 November and 21 December 2023, with 136,000 start and end points inside the county. The first three tests were written down before the results were read. The fourth was added afterwards. <span class="chip obs">Observed</span></p>
   <div class="tw"><table><thead><tr><th>Question</th><th>Result</th><th>Reading</th></tr></thead><tbody>
@@ -827,7 +844,7 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
   <div class="two">
     <div>
       <h3>What this means</h3>
-      <p>These riders work from stages on the matatu network, around markets, terminals and the city centre. That supports siting charging and battery swap points at stages, and it points to destinations as the better guide to which stages matter. In the part of the city the sample covers, the feeder corridors are not where these riders' trips end.</p>
+      <p>These riders work from stages on the matatu network, around markets, terminals and the city centre. That supports siting charging and battery swap points at stages, and it points to destinations as the better guide to which stages matter. In the part of the city the sample covers, the feeder corridors are not where these riders' trips end. A 2020 study of Kampala found the same pattern.</p>
     </div>
     <div>
       <h3>What the sample cannot say</h3>
@@ -836,33 +853,94 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
   </div>
 </section>
 
-<div class="brief">
-  <div><h3>What the Nairobi run shows</h3><p>About 1.0 million of the county's 4.62 million residents live between 800 m and 3 km from a mapped matatu stop. The model traces the roads they would use and flags 39 corridors. Ten stages collect a third of that population, which is where siting decisions would start.</p></div>
-  <div><h3>What is tested so far</h3><p>Checked against open GPS records from 119 Nairobi boda riders, the model's stage layer holds up in one respect: 65% of the riders' trip ends fall within 150 m of a matatu stop. The flagged feeder corridors could be tested only in the west of the city, and there the riders' trips did not concentrate on them.</p></div>
-  <div><h3>What Kisumu would get</h3><p>The county has set e-mobility and charging targets in its climate action plan and its 100% Renewable Energy Roadmap. Senke90 adds the layer those targets need, showing which corridors, stages and rider groups come first and the evidence behind each.</p></div>
-  <div><h3>Proposed next step</h3><p>A technical review of this demonstration, followed by stakeholder mapping and data discovery in Kisumu, leading to one corridor chosen with the county for ground truthing.</p></div>
-</div>
+<section>
+  <h2>What this changes for Kisumu</h2>
+  <p>The Nairobi check reshapes the Kisumu work. It now starts from stages and riders, and it treats the model's corridor flags as places to check. Kisumu has no published dataset of boda stages or matatu routes, so the first output is one the city does not yet have.</p>
+  <ol class="stages">
+    <li><b>Stage census</b><span>Every boda stage in the study area mapped with riders, and with planning students from Maseno University if the university agrees.</span></li>
+    <li><b>Rider trip records</b><span>Volunteer riders log their trips for two weeks, which shows whether Kisumu's bodas feed matatu stages or carry whole trips.</span></li>
+    <li><b>One corridor tested</b><span>A corridor chosen with the county is counted against two comparison stages, with the pass rule set in advance.</span></li>
+    <li><b>Stage register</b><span>Who organizes each stage and how they want to be engaged, so a pilot is designed with the riders it depends on.</span></li>
+  </ol>
+  <div class="two">
+    <div>
+      <h3>What the county would hold at the end</h3>
+      <ul>
+        <li>A map of the county's boda stages and the corridors between them, ranked and with an evidence label on every figure.</li>
+        <li>A shortlist of sites for charging and battery swap points, drawn from the stages that collect the most riders and residents.</li>
+        <li>A stage-by-stage register of who organizes each stage and how they want to be engaged.</li>
+        <li>A short methods note and the model code, so county staff or a local university can rerun it as the city changes.</li>
+      </ul>
 
-<div class="figs">
-  <div class="fig"><b>4.62 M</b><span>residents in Nairobi City County <span class="chip prox">Proxy</span></span></div>
-  <div class="fig"><b>78%</b><span>live within 800 m of a mapped matatu stop, by road <span class="chip der">Derived</span></span></div>
-  <div class="fig"><b>1.0 M</b><span>live 800 m to 3 km from a stop: the feeder population <span class="chip der">Derived</span></span></div>
-  <div class="fig"><b>39</b><span>feeder corridors flagged, 38.9 km in total <span class="chip der">Derived</span></span></div>
-</div>
+      <h3>What it asks of the county</h3>
+      <p>One focal person, access to existing plans and any stage or licensing records, and two working sessions. Counting and mapping are done by the research side.</p>
+    </div>
+    <div>
+      <h3>Proposed sequence</h3>
+  <div class="tl">
+    <div><b>October 2026</b><p>Technical review of this demonstration by the UTM team. Scoping visit to Kisumu and Maseno from 7 October for stakeholder mapping and data discovery.</p></div>
+    <div><b>Late 2026</b><p>Kisumu screening run. One corridor chosen with the county.</p></div>
+    <div><b>Early 2027</b><p>Ground truthing of that corridor. Findings shared with the county and rider groups.</p></div>
+    <div><b>Mid 2027</b><p>Campaign period and the general election on 10 August 2027. No new field engagement. The work stays anchored in technical departments, existing county plans and the university link.</p></div>
+    <div><b>After the election</b><p>Handover brief for the incoming administration and the 2028 to 2032 county plan.</p></div>
+  </div>
+      <p class="hint">This sequence is a proposal and is open to change with the county and the UTM team.</p>
+    </div>
+  </div>
+  <h3>Support requested</h3>
+  <p>The five kinds of support listed in the concept note remain the request.</p>
+  <ul>
+    <li>Methodological review of the indicators and assumptions on this page.</li>
+    <li>Guidance on which Research Cluster, and which City2City topic for Kisumu, this work fits best.</li>
+    <li>Help identifying the right technical contacts in Kisumu County.</li>
+    <li>Advice on county data that could replace the proxies used here.</li>
+    <li>Support in structuring a one-corridor validation and pilot pathway.</li>
+  </ul>
 
+</section>
 
 <section>
-  <h2>The corridors, ranked</h2>
+  <h2>More detail</h2>
+  <p>Each heading opens a fuller account for readers who want to check the work.</p>
+<details class="fold">
+  <summary>The corridor test and the Nairobi to Kisumu transfer</summary>
+  <div class="dbody">
+  <div class="three">
+    <div><h3>Transfers as it is</h3><p>Roads and activity centres from OpenStreetMap, population from WorldPop, and the model code.</p></div>
+    <div><h3>Has to be built</h3><p>Kisumu has no published matatu route and stop dataset. The formal network will be drawn from the corridors in the Kisumu Sustainable Mobility Plan and from a stage inventory collected in the field.</p></div>
+    <div><h3>May behave differently</h3><p>Road and stage mapping in OpenStreetMap is thinner in Kisumu than in Nairobi, and bodas there are widely used for whole trips as well as feeder trips. Both points are checked in the field.</p></div>
+  </div>
+
+  <h3>Two readings of boda demand</h3>
+  <p>The corridors on this page follow a feeder reading, in which bodas carry residents between home and the nearest matatu stage. A second reading is that bodas carry whole trips to markets, hospitals, schools and workplaces. A 2020 study of Kampala for the French development agency, using trip records from 8,981 SafeBoda drivers, found that boda trips mostly ran to the final destination and that only 8 of 28 planned bus rapid transit stops had a boda stage within 150 m.</p>
+  <p>The tracked riders in Nairobi point the same way as Kampala. Their trips start and end mostly at stages on the matatu network and near destinations, and rarely in the areas far from a stop that a feeder trip would serve: 5% of trip ends lie more than 600 m from any stop, where 15% of residents live.</p>
+  <p>The model holds both readings. The feeder corridors are the pink lines on the map, and the whole-trip reading is the layer of busiest roads by modelled demand. Ground truthing in Kisumu would establish which reading describes the city, starting from a census of stages and from riders' own records of where their trips start and end.</p>
+
+  <div class="test">
+    <h3>Ground truthing one corridor, with the test set in advance</h3>
+    <dl>
+      <dt>Where</dt><dd>The stage end of the corridor chosen with the county, and two comparison stages that the model ranks low.</dd>
+      <dt>What</dt><dd>Boda departures carrying a passenger, counted per hour in three windows (06:00 to 08:00, 12:00 to 14:00, 18:00 to 20:00) on two days.</dd>
+      <dt>Supported if</dt><dd>The flagged stage shows at least twice the departures of the comparison stages.</dd>
+      <dt>If it fails</dt><dd>The result is reported as a miss and the model is revised before any siting advice is given.</dd>
+      <dt>Alongside</dt><dd>A census of stages in the study area, trip records from a small group of volunteer riders, conversations with riders and stage leadership, and a check of which flagged corridors are already served by existing e-mobility initiatives such as WeMobility, SESA, Roam and Ampersand. Conversations start once the research permit and county consent are in place.</dd>
+      <dt>Then</dt><dd>If the first corridor holds, the same test widens to six flagged and six comparison stages.</dd>
+    </dl>
+  </div>
+  </div>
+</details>
+
+<details class="fold">
+  <summary>Model output: flagged corridors, ranked stages and one corridor brief</summary>
+  <div class="dbody">
   <p>These corridors are model output. The first check against tracked riders did not support the feeder reading in the west of the city, and the largest corridors lie outside that sample, so the list is kept here as a set of places to test. A corridor is flagged when it carries heavy feeder load and lies more than 150 m from every mapped matatu route. The residents figure counts people who live beyond 800 m of a stop and whose shortest route to it uses the corridor. It measures potential demand, and trips and riders still have to be counted in the field. Most of the largest corridors serve dense, lower-income neighbourhoods such as Kibera, Mathare, Huruma, Mukuru, Kawangware and Kangemi. Figures are rounded to the nearest hundred because the population data is modelled.</p>
   <div class="tw"><table id="ctab"><thead><tr><th>#</th><th>Feeds stage</th><th>Area</th><th>Road</th><th class="n">Residents relying on it</th><th class="n">Length</th></tr></thead><tbody></tbody></table></div>
   <p class="hint">Select a stage name to zoom to its corridor. Stage names are as recorded in the Digital Matatus feed, which is why some are short local names such as Garage, Flats or Posta. Area names are the author's reading of the map and are still to be confirmed. All 39 corridors are on the map.</p>
   <h3>Stages with the largest feeder population</h3>
   <p>Each stage is ranked by the residents who live beyond walking distance and have it as their nearest stop. These are the first places to look at for rider waiting areas and for charging or battery swap points. The ten highest-ranked stages collect 34% of the county's feeder population, the top twenty collect 48% and the top forty collect 64%, so a small number of sites reaches a large share of the people concerned.</p>
   <div class="tw"><table id="stab"><thead><tr><th>#</th><th>Stage</th><th class="n">Feeder population</th></tr></thead><tbody></tbody></table></div>
-</section>
 
-<section>
-  <h2>One corridor in detail</h2>
+  <h3>One corridor in detail</h3>
   <p>The concept note said the demonstration would turn one flagged corridor into a validation brief. This is the brief for the highest-ranked corridor, in the format each Kisumu corridor would receive.</p>
   <div class="test">
     <h3>Corridor 1: Kibera to Moi Girls' School Junction</h3>
@@ -876,10 +954,36 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
       <dt>Next decision</dt><dd>A count at the stage in the morning and evening peak, and a conversation with stage leadership, to confirm or drop the corridor.</dd>
     </dl>
   </div>
-</section>
+  </div>
+</details>
 
-<section>
-  <h2>What has been tested and what has not</h2>
+<details class="fold">
+  <summary>How the model works, its data and its validation</summary>
+  <div class="dbody">
+  <div class="two">
+    <div>
+      <h3>Demand to destinations</h3>
+      <p>Residents travel from 1 km population cells to activity centres: markets, hospitals, schools, colleges, bus stations, shops, and industrial and commercial land. Trips fall off with travel time and follow the fastest route. The result is a demand score for every road, tested against the matatu network.</p>
+    </div>
+    <div>
+      <h3>Access to stages</h3>
+      <p>Each 500 m population cell is routed to its nearest matatu stop by road distance. Residents between 800 m and 3 km from the stop are counted on every road they use. Roads with heavy load and no matatu service are flagged, and stops are ranked by the residents they collect.</p>
+    </div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Input or output</th><th>Source</th><th>Date</th><th>Evidence</th></tr></thead><tbody>
+    <tr><td>Roads (19,415 km in the study area; 7,631 km in the county)</td><td>OpenStreetMap, Geofabrik Kenya extract</td><td>4 Oct 2026</td><td><span class="chip obs">Observed</span></td></tr>
+    <tr><td>Matatu routes and stops (272 route shapes, 4,284 stops)</td><td>Digital Matatus GTFS feed</td><td>2019</td><td><span class="chip obs">Observed</span></td></tr>
+    <tr><td>Tracked boda trips (119 riders, about 122,000 movements)</td><td>Kitetu, Mbutura, Stratford and Booysen, Mendeley Data</td><td>Nov to Dec 2023</td><td><span class="chip obs">Observed</span></td></tr>
+    <tr><td>Population</td><td>WorldPop, UN-adjusted constrained, 100 m</td><td>2020</td><td><span class="chip prox">Proxy</span></td></tr>
+    <tr><td>Activity centres (4,839 places)</td><td>OpenStreetMap</td><td>4 Oct 2026</td><td><span class="chip prox">Proxy</span></td></tr>
+    <tr><td>County boundary</td><td>IEBC</td><td>2013</td><td><span class="chip obs">Observed</span></td></tr>
+    <tr><td>Demand scores, feeder loads, corridors, stage ranks</td><td>Senke90 model</td><td>4 Oct 2026</td><td><span class="chip der">Derived</span></td></tr>
+    <tr><td>Travel speeds by road class, 800 m walking threshold, 3 km feeder limit, decay exponent</td><td>Stated assumptions, varied in the stability checks</td><td></td><td><span class="chip scen">Scenario</span></td></tr>
+    <tr><td>Avoided emissions per motorcycle</td><td>Stratford and Booysen (2025) inputs</td><td>2025</td><td><span class="chip scen">Scenario</span></td></tr>
+  </tbody></table></div>
+  <p class="hint">The model runs on a study area wider than the county (longitude 36.62 to 37.08, latitude -1.48 to -1.03) because residents and matatu routes cross the county line. Figures and layers on this page are clipped to the county.</p>
+
+  <h3>What has been tested and what has not</h3>
   <div class="tw"><table><thead><tr><th>Claim</th><th>Status</th><th>Evidence so far</th></tr></thead><tbody>
     <tr><td>The model's picture of travel demand is sensible</td><td><span class="chip obs">Tested, partial pass</span></td><td>Its busiest 20% of roads lie on matatu routes 53% of the time, against 25% for the whole network. It beats a ranking built from the road network alone (44%) and ties with a ranking by road class (51% to 54%).</td></tr>
     <tr><td>The results hold when assumptions change</td><td><span class="chip obs">Tested</span></td><td>Changing how fast trips fall off with travel time leaves the busiest roads 96% to 97% the same. Changing the walking distance to 600 m or 1,000 m leaves 62% to 72% of flagged roads the same.</td></tr>
@@ -906,121 +1010,13 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
       </ul>
     </div>
   </details>
-</section>
-
-<section>
-  <h2>Where this sits in the concept note</h2>
-  <p>The concept note set out five stages from corridor to pilot. This demonstration completes the first on Nairobi data and prepares the second for Kisumu.</p>
-  <ol class="stages">
-    <li class="on"><b>Screening</b><span>Shown here on Nairobi</span></li>
-    <li class="next"><b>Ground truthing</b><span>Proposed below for Kisumu</span></li>
-    <li><b>Pilot-readiness assessment</b><span>With the county, after validation</span></li>
-    <li><b>Pilot design</b><span>Fitted to the corridor</span></li>
-    <li><b>Monitoring and learning</b><span>Through the county's own reporting</span></li>
-  </ol>
-  <h3>What changed since the concept note</h3>
-  <p>The note named edge betweenness as the network measure and said it should not stand in for demand. Testing bore that out, since betweenness alone placed 44% of its top roads on matatu routes, against 53% for a measure weighted by population and destinations. The demonstration ranks roads by the weighted measure and keeps betweenness as a benchmark. A second step routes residents to their nearest stage, which is the step that shows where the formal network stops.</p>
-</section>
-
-<section>
-  <h2>From Nairobi to Kisumu</h2>
-  <div class="three">
-    <div><h3>Transfers as it is</h3><p>Roads and activity centres from OpenStreetMap, population from WorldPop, and the model code.</p></div>
-    <div><h3>Has to be built</h3><p>Kisumu has no published matatu route and stop dataset. The formal network will be drawn from the corridors in the Kisumu Sustainable Mobility Plan and from a stage inventory collected in the field.</p></div>
-    <div><h3>May behave differently</h3><p>Road and stage mapping in OpenStreetMap is thinner in Kisumu than in Nairobi, and bodas there are widely used for whole trips as well as feeder trips. Both points are checked in the field.</p></div>
   </div>
-  <h3>Two readings of boda demand</h3>
-  <p>The corridors on this page follow a feeder reading, in which bodas carry residents between home and the nearest matatu stage. A second reading is that bodas carry whole trips to markets, hospitals, schools and workplaces. A 2020 study of Kampala for the French development agency, using trip records from 8,981 SafeBoda drivers, found that boda trips mostly ran to the final destination and that only 8 of 28 planned bus rapid transit stops had a boda stage within 150 m.</p>
-  <p>The tracked riders in Nairobi point the same way as Kampala. Their trips start and end mostly at stages on the matatu network and near destinations, and rarely in the areas far from a stop that a feeder trip would serve: 5% of trip ends lie more than 600 m from any stop, where 15% of residents live.</p>
-  <p>The model holds both readings. The feeder corridors are the pink lines on the map, and the whole-trip reading is the layer of busiest roads by modelled demand. Ground truthing in Kisumu would establish which reading describes the city, starting from a census of stages and from riders' own records of where their trips start and end.</p>
-  <div class="test">
-    <h3>Ground truthing one corridor, with the test set in advance</h3>
-    <dl>
-      <dt>Where</dt><dd>The stage end of the corridor chosen with the county, and two comparison stages that the model ranks low.</dd>
-      <dt>What</dt><dd>Boda departures carrying a passenger, counted per hour in three windows (06:00 to 08:00, 12:00 to 14:00, 18:00 to 20:00) on two days.</dd>
-      <dt>Supported if</dt><dd>The flagged stage shows at least twice the departures of the comparison stages.</dd>
-      <dt>If it fails</dt><dd>The result is reported as a miss and the model is revised before any siting advice is given.</dd>
-      <dt>Alongside</dt><dd>A census of stages in the study area, trip records from a small group of volunteer riders, conversations with riders and stage leadership, and a check of which flagged corridors are already served by existing e-mobility initiatives such as WeMobility, SESA, Roam and Ampersand. Conversations start once the research permit and county consent are in place.</dd>
-      <dt>Then</dt><dd>If the first corridor holds, the same test widens to six flagged and six comparison stages.</dd>
-    </dl>
-  </div>
-</section>
+</details>
 
-<section>
-  <h2>What Kisumu would get</h2>
-  <div class="two">
-    <div>
-      <h3>Outputs</h3>
-      <ul>
-        <li>A ranked map of feeder corridors and stages for the county, with an evidence label on every figure.</li>
-        <li>A shortlist of sites for charging and battery swap points, drawn from the stages that collect the most riders and residents.</li>
-        <li>A stage-by-stage register of who organizes each stage and how they want to be engaged.</li>
-        <li>A short methods note and the model code, so county staff or a local university can rerun it as the city changes.</li>
-      </ul>
-    </div>
-    <div>
-      <h3>Who must be involved</h3>
-      <p>Each flagged corridor ends at a named stage, and a stage is where riders organize, through a chairperson, a welfare group or a SACCO. A pilot that places chargers or electric motorcycles without them risks being bypassed. The field phase records these groups stage by stage, so the county has the list of people a pilot depends on before the pilot is designed.</p>
-      <h3>What it asks of the county</h3>
-      <p>One focal person, access to existing plans and any stage or licensing records, and two working sessions. Counting and mapping are done by the research side.</p>
-    </div>
-  </div>
-  <p class="hint">Global Research and Action Agenda topics covered: mobility, energy, informality, city-level data and models, uncertainty, engagement and participation, and governance and multi-level partnerships.</p>
-</section>
-
-<section>
-  <h2>Proposed sequence, set against the county calendar</h2>
-  <div class="tl">
-    <div><b>October 2026</b><p>Technical review of this demonstration by the UTM team. Scoping visit to Kisumu and Maseno from 7 October for stakeholder mapping and data discovery.</p></div>
-    <div><b>Late 2026</b><p>Kisumu screening run. One corridor chosen with the county.</p></div>
-    <div><b>Early 2027</b><p>Ground truthing of that corridor. Findings shared with the county and rider groups.</p></div>
-    <div><b>Mid 2027</b><p>Campaign period and the general election on 10 August 2027. No new field engagement. The work stays anchored in technical departments, existing county plans and the university link.</p></div>
-    <div><b>After the election</b><p>Handover brief for the incoming administration and the 2028 to 2032 county plan.</p></div>
-  </div>
-  <p class="hint">This sequence is a proposal and is open to change with the county and the UTM team.</p>
-</section>
-
-<section>
-  <h2>Support requested</h2>
-  <p>The five kinds of support listed in the concept note remain the request.</p>
-  <ul>
-    <li>Methodological review of the indicators and assumptions on this page.</li>
-    <li>Guidance on which Research Cluster, and which City2City topic for Kisumu, this work fits best.</li>
-    <li>Help identifying the right technical contacts in Kisumu County.</li>
-    <li>Advice on county data that could replace the proxies used here.</li>
-    <li>Support in structuring a one-corridor validation and pilot pathway.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>How the model works</h2>
-  <div class="two">
-    <div>
-      <h3>Demand to destinations</h3>
-      <p>Residents travel from 1 km population cells to activity centres: markets, hospitals, schools, colleges, bus stations, shops, and industrial and commercial land. Trips fall off with travel time and follow the fastest route. The result is a demand score for every road, tested against the matatu network.</p>
-    </div>
-    <div>
-      <h3>Access to stages</h3>
-      <p>Each 500 m population cell is routed to its nearest matatu stop by road distance. Residents between 800 m and 3 km from the stop are counted on every road they use. Roads with heavy load and no matatu service are flagged, and stops are ranked by the residents they collect.</p>
-    </div>
-  </div>
-  <div class="tw"><table><thead><tr><th>Input or output</th><th>Source</th><th>Date</th><th>Evidence</th></tr></thead><tbody>
-    <tr><td>Roads (19,415 km in the study area; 7,631 km in the county)</td><td>OpenStreetMap, Geofabrik Kenya extract</td><td>4 Oct 2026</td><td><span class="chip obs">Observed</span></td></tr>
-    <tr><td>Matatu routes and stops (272 route shapes, 4,284 stops)</td><td>Digital Matatus GTFS feed</td><td>2019</td><td><span class="chip obs">Observed</span></td></tr>
-    <tr><td>Tracked boda trips (119 riders, about 122,000 movements)</td><td>Kitetu, Mbutura, Stratford and Booysen, Mendeley Data</td><td>Nov to Dec 2023</td><td><span class="chip obs">Observed</span></td></tr>
-    <tr><td>Population</td><td>WorldPop, UN-adjusted constrained, 100 m</td><td>2020</td><td><span class="chip prox">Proxy</span></td></tr>
-    <tr><td>Activity centres (4,839 places)</td><td>OpenStreetMap</td><td>4 Oct 2026</td><td><span class="chip prox">Proxy</span></td></tr>
-    <tr><td>County boundary</td><td>IEBC</td><td>2013</td><td><span class="chip obs">Observed</span></td></tr>
-    <tr><td>Demand scores, feeder loads, corridors, stage ranks</td><td>Senke90 model</td><td>4 Oct 2026</td><td><span class="chip der">Derived</span></td></tr>
-    <tr><td>Travel speeds by road class, 800 m walking threshold, 3 km feeder limit, decay exponent</td><td>Stated assumptions, varied in the stability checks</td><td></td><td><span class="chip scen">Scenario</span></td></tr>
-    <tr><td>Avoided emissions per motorcycle</td><td>Stratford and Booysen (2025) inputs</td><td>2025</td><td><span class="chip scen">Scenario</span></td></tr>
-  </tbody></table></div>
-  <p class="hint">The model runs on a study area wider than the county (longitude 36.62 to 37.08, latitude -1.48 to -1.03) because residents and matatu routes cross the county line. Figures and layers on this page are clipped to the county.</p>
-</section>
-
-<section id="scenario">
-  <h2>A scenario for motorcycles and emissions</h2>
-  <p>The model counts residents. Turning residents into motorcycles and emissions takes assumptions, so they are set out here and can be changed. Every result in this section is a scenario built on those assumptions. <span class="chip scen">Scenario</span></p>
+<details class="fold">
+  <summary>A scenario for motorcycles and emissions</summary>
+  <div class="dbody">
+  <p>The model counts residents. Turning residents into motorcycles and emissions takes assumptions, so they are set out here and can be changed. Every result in this section is a scenario built on those assumptions. It starts from the feeder population, the reading that the tracked data did not support in the west of Nairobi, so the results are illustrative. <span class="chip scen">Scenario</span></p>
   <div class="scenbox">
     <div class="ctl">
       <label for="sc-c">Corridor</label>
@@ -1040,8 +1036,28 @@ img{max-width:100%}[hidden]{display:none!important}:root{color-scheme:light}
   </div>
   <p class="hint" id="r-check"></p>
   <p class="hint">Assumptions behind the defaults. Each rider makes two trips a day, out and back. Motorcycles carry 12 to 20 passenger trips a day, the range reported in the Kisumu Sustainable Mobility Plan (2020). One electric motorcycle avoids about 1.14 tonnes of CO₂ a year, with a range of 0.63 to 1.56, using fuel and energy use measured on a GPS-tracked Nairobi fleet (Stratford and Booysen, 2025). Tracked Nairobi riders covered a median of 80 km a day. The share of residents who ride is the least certain input, the tracked data suggests it is low in the west of Nairobi, and it is the first thing field counts would replace.</p>
-</section>
+  </div>
+</details>
 
+<details class="fold">
+  <summary>How this follows the concept note</summary>
+  <div class="dbody">
+  <p>The concept note set out five stages from corridor to pilot. This demonstration completes the first on Nairobi data and prepares the second for Kisumu.</p>
+  <ol class="stages">
+    <li class="on"><b>Screening</b><span>Shown here on Nairobi</span></li>
+    <li class="next"><b>Ground truthing</b><span>Proposed below for Kisumu</span></li>
+    <li><b>Pilot-readiness assessment</b><span>With the county, after validation</span></li>
+    <li><b>Pilot design</b><span>Fitted to the corridor</span></li>
+    <li><b>Monitoring and learning</b><span>Through the county's own reporting</span></li>
+  </ol>
+  <h3>What changed since the concept note</h3>
+  <p>The note named edge betweenness as the network measure and said it should not stand in for demand. Testing bore that out, since betweenness alone placed 44% of its top roads on matatu routes, against 53% for a measure weighted by population and destinations. The demonstration ranks roads by the weighted measure and keeps betweenness as a benchmark. A second step routes residents to their nearest stage, which is the step that shows where the formal network stops.</p>
+
+  <p class="hint">Global Research and Action Agenda topics covered: mobility, energy, informality, city-level data and models, uncertainty, engagement and participation, and governance and multi-level partnerships.</p>
+  </div>
+</details>
+
+</section>
 
 <section>
   <h2>Limits</h2>
@@ -1110,7 +1126,7 @@ function paint(){
   trunk.forEach(t => t[1].setStyle({color:tok(t[0] ? "--trunk" : "--trunkoff")}));
   if (minor) minor.eachLayer(l => l.setStyle({color:tok("--road")}));
 }
-["road","feed","matatu","obs","corr","stage","label","num"].forEach(k => G[k].addTo(map));
+["road","feed","matatu","obs","corr","label","num"].forEach(k => G[k].addTo(map));
 map.fitBounds(D.observed.reduce((b,o) => b.extend([o.lat, o.lon]), G.corr.getLayers().reduce((b,g) => b.extend(g.getBounds()), L.latLngBounds([]))), {padding:[30,30]}); paint();
 const bind = (id, keys) => document.getElementById(id).addEventListener("change", e => keys.forEach(k => e.target.checked ? G[k].addTo(map) : map.removeLayer(G[k])));
 bind("l-corr",["corr","num"]); bind("l-stage",["stage"]); bind("l-obs",["obs"]); bind("l-matatu",["matatu"]); bind("l-feed",["feed"]); bind("l-road",["road","label"]); document.getElementById("l-road").addEventListener("change", e => e.target.checked ? tiles.addTo(map) : map.removeLayer(tiles)); map.on("zoomend", streets);
