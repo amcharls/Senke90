@@ -10,22 +10,12 @@
 <style>
 /* Layout: a transit-survey sheet. Figures strip, then the map as the working surface with its legend beside it, then ranked tables and the method register. */
 :root{
-  --bg:#f4f6f8; --surface:#ffffff; --ink:#14202b; --muted:#566573; --line:#d6dce3;
-  --corridor:#c2185b; --matatu:#2a6f9e; --feeder:#d98a1f; --road:#c3ccd5; --mapbg:#eef1f4; --stage:#14202b; --stagering:#ffffff;
+  --bg:#f6f1e7; --surface:#fffdf8; --ink:#1f1a14; --muted:#6b6256; --line:#e2d9c8;
+  --corridor:#c2185b; --matatu:#2a6f9e; --feeder:#d98a1f; --road:#cfc6b6; --mapbg:#f3ede1; --stage:#14202b; --stagering:#ffffff;
   --trunk:#1c8068; --trunkoff:#7a56b0; --boundary:#6b7a88;
-  --tilefilter:grayscale(.7) contrast(.92) brightness(1.03); --obs:#2a6f9e; --der:#c2185b; --prox:#a8690f; --scen:#5d5a8c;
+  --tilefilter:grayscale(.7) sepia(.18) contrast(.92) brightness(1.03); --obs:#2a6f9e; --der:#c2185b; --prox:#a8690f; --scen:#5d5a8c;
   --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#0f151b; --surface:#172029; --ink:#e7edf2; --muted:#9aa9b6; --line:#2b3743;
-  --corridor:#ff5f97; --matatu:#72b4e3; --feeder:#f0b34f; --road:#34424f; --mapbg:#121a22; --stage:#e7edf2; --stagering:#0f151b;
-  --trunk:#4cc9a8; --trunkoff:#b79af0; --boundary:#8797a6;
-  --tilefilter:invert(1) hue-rotate(180deg) grayscale(.55) brightness(.85) contrast(.9); --obs:#72b4e3; --der:#ff5f97; --prox:#f0b34f; --scen:#b3afe6; color-scheme:dark } }
-:root[data-theme="dark"]{
-  --bg:#0f151b; --surface:#172029; --ink:#e7edf2; --muted:#9aa9b6; --line:#2b3743;
-  --corridor:#ff5f97; --matatu:#72b4e3; --feeder:#f0b34f; --road:#34424f; --mapbg:#121a22; --stage:#e7edf2; --stagering:#0f151b;
-  --trunk:#4cc9a8; --trunkoff:#b79af0; --boundary:#8797a6;
-  --tilefilter:invert(1) hue-rotate(180deg) grayscale(.55) brightness(.85) contrast(.9); --obs:#72b4e3; --der:#ff5f97; --prox:#f0b34f; --scen:#b3afe6; color-scheme:dark }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
 .wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:flex;flex-direction:column;gap:40px}
